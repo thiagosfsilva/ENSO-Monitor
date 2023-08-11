@@ -55,6 +55,7 @@ fig_level.update_layout(spikedistance=1000, hoverdistance=100)
 # Dash app
 
 app = Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     html.H1(children='ENSO 2003 drought monitor', style={'textAlign':'center'}),
