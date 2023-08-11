@@ -2,3 +2,4 @@ dash
 pandas
 gunicorn
 lxml
+dash_bootstrap_components
