@@ -5,7 +5,7 @@ import get_telem
 
 ###### Get data
 #curData = pd.read_pickle('curData.pkl').reset_index()
-curData = get_telem.get_telem().reset_index()
+curData = pd.read_pickle('data/curData.pkl').reset_index()
 hisData = pd.read_pickle('data/hisData.pkl').reset_index()
 
 # Calculate statistics
