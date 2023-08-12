@@ -2,7 +2,8 @@ name: run get_telem.py
 
 on:
   schedule:
-    - cron: '0 1 * * *' # At 00:00 on Monday
+    - cron: '0 1 * * *' # At 1am every day
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: execute py script # run main.py
+      - name: execute py script # run get_telem.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python get_telem.py
