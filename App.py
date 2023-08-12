@@ -26,11 +26,11 @@ fig_level = go.Figure([
     # Current data
     go.Scatter(name='2023',x=curData['Doy'],y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
     # Historical droughts
-    go.Scatter(name='2022',x=doy2022['Doy'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=1),line_shape='spline'),
-    go.Scatter(name='2015',x=doy2015['Doy'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=1),line_shape='spline'),
-    go.Scatter(name='2010',x=doy2010['Doy'],y=doy2010['Nivel'],mode='lines',line=dict(color='#800026',width=1, smoothing=1),line_shape='spline'),
-    go.Scatter(name='2005',x=doy2005['Doy'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=1),line_shape='spline'),
-    go.Scatter(name='1998',x=doy1998['Doy'],y=doy1998['Nivel'],mode='lines',line=dict(color='#e31a1c',width=1, smoothing=1),line_shape='spline'),
+    go.Scatter(name='2022',x=doy2022['Doy'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
+    go.Scatter(name='2015',x=doy2015['Doy'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
+    go.Scatter(name='2010',x=doy2010['Doy'],y=doy2010['Nivel'],mode='lines',line=dict(color='#800026',width=1, smoothing=0.1),line_shape='spline'),
+    go.Scatter(name='2005',x=doy2005['Doy'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=0.1),line_shape='spline'),
+    go.Scatter(name='1998',x=doy1998['Doy'],y=doy1998['Nivel'],mode='lines',line=dict(color='#e31a1c',width=1, smoothing=0.1),line_shape='spline'),
     # Climatology
     go.Scatter(name='Mean 1979-2022',x=doyMean['Doy'],y=doyMean['mean'],mode='lines',line=dict(color='rgb(100, 100, 100)', dash='dash'),line_shape='spline'),
     go.Scatter(name='95% CI',x=doySD['Doy'],y=doyMean['mean'] + 1.96 * doySD['std'],mode='lines',marker=dict(color="#444"),
