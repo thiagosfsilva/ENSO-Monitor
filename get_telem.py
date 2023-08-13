@@ -35,8 +35,10 @@ def get_telem(export=False):
     if export:
         curData.to_pickle('data/curData.pkl')
         upDate.to_pickle('data/upDate.pkl')
+        print(f'Data updated on {datetime.today()}')
     
     return curData
     
 if __name__ == "__main__":
     get_telem(export=True)
+    

@@ -1,7 +1,8 @@
-from dash import Dash, html, dcc
+from dash import Dash, dcc
 import pandas as pd
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
+from datetime import datetime
 
 ###### Get data
 #curData = pd.read_pickle('curData.pkl').reset_index()
@@ -9,6 +10,14 @@ curData = pd.read_pickle('data/curData.pkl').reset_index()
 hisData = pd.read_pickle('data/hisData.pkl').reset_index()
 upDate = pd.read_pickle('data/upDate.pkl').reset_index()
 updated = str(upDate._get_value(0,0))
+curData.head()
+
+# Convert to meters
+curData.Nivel = curData.Nivel/100
+hisData.Nivel = hisData.Nivel/100
+
+# Convert data to datetime format
+curData['Date'] = pd.to_datetime(curData['Date'], format='%Y-%m-%d')
 
 # Calculate statistics
 doyMean = hisData.groupby('Doy').Nivel.agg(['mean']).reset_index()
@@ -24,7 +33,7 @@ doy2022 = hisData[hisData['Yr']==2022]
 # Generate Plot
 fig_level = go.Figure([
     # Current data
-    go.Scatter(name='2023',x=curData['Doy'],y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
+    go.Scatter(name='2023',x=curData['Date'].dt.dayofyear,y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
     # Historical droughts
     go.Scatter(name='2022',x=doy2022['Doy'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
     go.Scatter(name='2015',x=doy2015['Doy'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
@@ -40,14 +49,20 @@ fig_level = go.Figure([
 ])
 
 fig_level.update_layout(
-    yaxis_title='Water level (cm)',
+    yaxis_title='Water level (meters)',
     xaxis_title='Day of the year',    
     #title='Current and historical water leveles, Fonte Boa',
     #width=1400,
     #height=800,
     margin=dict(l=50,r=50,b=100,t=30,pad=0),
-    hovermode='x unified'
+    hovermode='x unified',
+    xaxis = dict(
+        tickmode = 'array',
+        tickvals = [1, 32, 60, 91, 121, 152,182,213,244,274,305,335],
+        ticktext = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    ),
 )
+
 
 fig_level.update_xaxes(showspikes=True, spikecolor="green", spikesnap="cursor", spikemode="across")
 #fig_level.update_yaxes(showspikes=True, spikecolor="orange", spikethickness=2)
