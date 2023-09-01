@@ -41,16 +41,16 @@ fig_level = go.Figure([
     go.Scatter(name='2005',x=doy2005['Doy'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=0.1),line_shape='spline'),
     go.Scatter(name='1998',x=doy1998['Doy'],y=doy1998['Nivel'],mode='lines',line=dict(color='#e31a1c',width=1, smoothing=0.1),line_shape='spline'),
     # Climatology
-    go.Scatter(name='Mean 1979-2022',x=doyMean['Doy'],y=doyMean['mean'],mode='lines',line=dict(color='rgb(100, 100, 100)', dash='dash'),line_shape='spline'),
-    go.Scatter(name='95% CI',x=doySD['Doy'],y=doyMean['mean'] + 1.96 * doySD['std'],mode='lines',marker=dict(color="#444"),
+    go.Scatter(name='Mean/Média 1979-2022',x=doyMean['Doy'],y=doyMean['mean'],mode='lines',line=dict(color='rgb(100, 100, 100)', dash='dash'),line_shape='spline'),
+    go.Scatter(name='95% CI / IC',x=doySD['Doy'],y=doyMean['mean'] + 1.96 * doySD['std'],mode='lines',marker=dict(color="#444"),
                line=dict(width=0, smoothing=0.5),showlegend=False,line_shape='spline'),
-    go.Scatter(name='95% CI',x=doySD['Doy'],y=doyMean['mean'] - 1.96 * doySD['std'],marker=dict(color="#444"),line=dict(width=0, smoothing=0.5),
+    go.Scatter(name='95% CI / IC',x=doySD['Doy'],y=doyMean['mean'] - 1.96 * doySD['std'],marker=dict(color="#444"),line=dict(width=0, smoothing=0.5),
                mode='lines',fillcolor='rgba(100, 100, 100, 0.2)',fill='tonexty',line_shape='spline')
 ])
 
 fig_level.update_layout(
-    yaxis_title='Water level (meters)',
-    xaxis_title='Day of the year',    
+    yaxis_title="Water level / Nivel d'Agua (m)",
+    xaxis_title='Day of the year / Dia do Ano',    
     #title='Current and historical water leveles, Fonte Boa',
     #width=1400,
     #height=800,
@@ -79,9 +79,9 @@ server = app.server
 app.layout = dbc.Container([
     dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink(f'Last updated on {updated}', href="#")),
+        dbc.NavItem(dbc.NavLink(f'Last updated on / Atualizado em {updated}', href="#")),
     ],
-    brand="ENSO 2003 drought monitor",
+    brand="Monitor ENSO El Ninõ 2023 -  Fonte Boa",
     brand_href="#",
     color="primary",
     dark=True,
