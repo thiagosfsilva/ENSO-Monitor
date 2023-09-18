@@ -47,9 +47,13 @@ for f in [in_files]:
     #%% Extract and stack observations
     st_data = extract_level(in_data)
 
+    #%%Remove February 29th
+    st_data = st_data[~((st_data['dy']==29) & (st_data['mn']==2))]
+
     #%% Save results
     out_name = f.replace('.csv', '_daily.csv')
     st_data.to_csv(out_name, index=False)
 
     #%% Count observations for sanity check
     print(st_data.groupby('yr')['value'].count())
+# %%
