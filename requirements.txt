@@ -1,5 +1,8 @@
-dash
-pandas
+dash~=2.11.1
+pandas~=2.0.3
 gunicorn
 lxml
 dash_bootstrap_components
+plotly~=5.15.0
+requests~=2.31.0
+matplotlib~=3.7.2
