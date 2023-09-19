@@ -1,10 +1,12 @@
 from dash import Dash, dcc
 import dash_bootstrap_components as dbc
 from plot_level import plot_level
+from plot_precip import plot_precip
 from pandas import read_pickle
 
 # Generate water level plot
 fig_level = plot_level()
+fig_precip = plot_precip()
 updated = read_pickle('data/upDate.pkl')
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY],
@@ -32,6 +34,9 @@ app.layout = dbc.Container([
     #    ]),
     dbc.Row(
     dcc.Graph(id='fig-level', figure=fig_level,  style={'aspect-ratio': '21 / 10'}),
+    ),
+    dbc.Row(
+    dcc.Graph(id='fig-precip', figure=fig_precip,  style={'aspect-ratio': '21 / 10'}),
     )
 ],
 fluid=True)
