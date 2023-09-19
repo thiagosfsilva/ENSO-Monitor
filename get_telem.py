@@ -21,12 +21,12 @@ def get_telem(export=False):
     rawTable.dropna()
     rawTable['DataHora'] = pd.to_datetime(rawTable['DataHora'])
     rawTable['Doy'] = rawTable['DataHora'].dt.dayofyear
-    rawTable['Date'] = pd.to_datetime(rawTable['DataHora']).dt.date
+    rawTable['Dt'] = pd.to_datetime(rawTable['DataHora']).dt.date
     rawTable['Time'] = pd.to_datetime(rawTable['DataHora']).dt.time
     rawTable.head()
 
     # Aggregate hydro data
-    curData = rawTable.groupby(['Date', 'Doy']).agg({
+    curData = rawTable.groupby(['Dt', 'Doy']).agg({
         'Vazao': 'max',
         'Nivel': 'max',
         'Chuva': 'sum'})

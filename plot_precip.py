@@ -3,33 +3,26 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 pio.renderers.default = "vscode"
+from numpy import nanstd
+from numpy import nanmean
 
 #%%
 def plot_level():
-    # Get water level data
+    #%% Get water level data
     curData = pd.read_pickle('data/curData.pkl').reset_index()
-    hisPrec = pd.read_pickle('data/hisPrec.pkl').reset_index()
+    hisData = pd.read_pickle('data/hisPrec.pkl').reset_index()
     #curData.head()
 
-    # Convert to meters
-    curData.Nivel = curData.Nivel / 100
-    hisData.Nivel = hisData.Nivel / 100
-
-    # Convert data to datetime format
+    #%% Convert data to datetime format
     curData['Date'] = pd.to_datetime(curData['Date'], format='%Y-%m-%d')
+    hisData['Doy'] = pd.to_numeric(hisData['dt'].dt.dayofyear,downcast='float')
 
-    # Calculate statistics
-    doyMean = hisData.groupby('Doy').Nivel.agg(['mean']).reset_index()
-    doySD = hisData.groupby('Doy').Nivel.agg(['std']).reset_index()
+    #%% Calculate statistics
+    doyMean = hisData.groupby('Doy').agg({'value': [ nanmean, nanstd ]}).reset_index() 
 
-    # Extract individual series
-    doy1998 = hisData[hisData['Yr'] == 1998]
-    doy2005 = hisData[hisData['Yr'] == 2005]
-    doy2010 = hisData[hisData['Yr'] == 2010]
-    doy2015 = hisData[hisData['Yr'] == 2015]
-    doy2022 = hisData[hisData['Yr'] == 2022]
 
-    # Generate Plot
+
+    #%% Generate Plot
     fig_level = go.Figure([
         # Current data
         go.Scatter(name='2023', x=curData['Date'].dt.dayofyear, y=curData['Nivel'], mode='lines',
