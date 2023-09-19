@@ -51,6 +51,9 @@ for f in [in_files]:
     #%%Remove February 29th
     st_data = st_data[~((st_data['Dy']==29) & (st_data['Mn']==2))]
 
+    #%% Make sure values are floats
+    st_data['Nivel'].astype(float)
+    
     #%% Save results
     out_name = f.replace('.csv', '_daily.csv')
     st_data.to_csv(out_name, index=False)
