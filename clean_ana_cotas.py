@@ -42,7 +42,7 @@ for f in [in_files]:
     #%% Format input data
     in_data = in_data_raw.copy()
     in_data['Data'] = pd.to_datetime(in_data['Data'], format="%d/%m/%Y")
-    in_data = in_data[(in_data['MediaDiaria'] == 1) & (in_data['NivelConsistencia'] == 1)]
+    in_data = in_data[(in_data['MediaDiaria'] == 1)]
 
 
     #%% Extract and stack observations
@@ -52,7 +52,7 @@ for f in [in_files]:
     st_data = st_data[~((st_data['Dy']==29) & (st_data['Mn']==2))]
 
     #%% Make sure values are floats
-    st_data['Nivel'].astype(float)
+    st_data['Nivel'] = st_data['Nivel'].astype(float)
     
     #%% Save results
     out_name = f.replace('.csv', '_daily.csv')

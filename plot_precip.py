@@ -3,25 +3,31 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 pio.renderers.default = "vscode"
-from numpy import nanstd
+from numpy import nanmean
 #%%
 def plot_precip():
-    #%Get water level data
+
+    #%%Get water level data
     curData = pd.read_pickle('data/curData.pkl').reset_index()
     hisData = pd.read_pickle('data/hisPrec.pkl').reset_index()
     #curData.head()
 
-    # Convert data to datetime format
+    #%% Convert data to datetime format
     curData['Dt'] = pd.to_datetime(curData['Dt'], format='%Y-%m-%d')
 
-    # Calculate statistics
-    doyMean = hisData.groupby('Doy').Chuva.agg(['mean']).reset_index()
-    doySD = hisData.groupby('Doy').Chuva.agg([nanstd]).reset_index()
+    #%% Define custom aggregation funtion
+    def nonzero_mean(series):
+        nonzero = series[series > 0]
+        mn = nanmean(nonzero)
+        return mn
 
-    #Generate Plot
+    #%% Calculate statistics
+    doyMean = hisData.groupby('Doy').Chuva.agg([nonzero_mean]).reset_index()
+    
+    #%% Generate Plot
     fig_level = go.Figure([
         # Current data
-        go.Bar(name=' Rainfall/Chuva 2023', x=curData['Dt'], y=curData['Chuva'],),# hovertemplate = '<br>Date/Data: %{x}</br>' + '<br><b>Rainfall/Chuva</b>: %{y}<br>', showlegend = False),
+        go.Bar(name='Rainfall/Chuva 2023', x=curData['Dt'], y=curData['Chuva'],),# hovertemplate = '<br>Date/Data: %{x}</br>' + '<br><b>Rainfall/Chuva</b>: %{y}<br>', showlegend = False),
         #            line=dict(color='#2c7bb6', width=4, smoothing=1),),
         # Historical droughts
         #go.Scatter(name='2022', x=doy2022['Doy'], y=doy2022['Nivel'], mode='lines',
@@ -35,7 +41,7 @@ def plot_precip():
         #go.Scatter(name='1998', x=doy1998['Doy'], y=doy1998['Nivel'], mode='lines',
         #           line=dict(color='#e31a1c', width=1, smoothing=0.1),),
         ## Climatology
-        go.Bar(name='Nonzero Mean / Media - dias com chuva', x=curData['Dt'], y=doyMean['mean'],)# hovertemplate = '<br><b>Mean/Média</b>: %{y}<br>', showlegend = False),
+        go.Bar(name='Mean Precip./ Chuva Média', x=curData['Dt'], y=doyMean['nonzero_mean'],)# hovertemplate = '<br><b>Mean/Média</b>: %{y}<br>', showlegend = False),
         #           line=dict(color='rgb(100, 100, 100)', dash='dash'), line_shape='spline'),
         #go.Scatter(name='95% CI', x=doySD['Doy'], y=doyMean['mean'] + 1.96 * doySD['std'], mode='lines',
         #           marker=dict(color="#444"),
@@ -58,7 +64,7 @@ def plot_precip():
     fig_level.update_xaxes(showspikes=True, spikecolor="green", spikesnap="cursor", spikemode="across",range=['2023-01-01', '2023-12-31'])
     fig_level.update_layout(spikedistance=1000, hoverdistance=100)
 
-    #
+    #%%
     return fig_level
 
 #%%

@@ -1,4 +1,4 @@
-from dash import Dash, dcc
+from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 from plot_level import plot_level
 from plot_precip import plot_precip
@@ -37,7 +37,10 @@ app.layout = dbc.Container([
     ),
     dbc.Row(
     dcc.Graph(id='fig-precip', figure=fig_precip,  style={'aspect-ratio': '21 / 10'}),
-    )
+    ),
+    dbc.Row(
+        html.H2('* Average rainfall excludes days of zero rain / A chuva média desconsidera os dias sem chuva.')
+        ),
 ],
 fluid=True)
 

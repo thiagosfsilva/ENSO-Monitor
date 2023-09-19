@@ -32,18 +32,18 @@ def plot_level():
     #%% Generate Plot
     fig_level = go.Figure([
         # Current data
-        go.Scatter(name='2023',x=curData['Date'].dt.dayofyear,y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
+        go.Scatter(name='2023',x=curData['Dt'],y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
         # Historical droughts
-        go.Scatter(name='2022',x=doy2022['Doy'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
-        go.Scatter(name='2015',x=doy2015['Doy'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
-        go.Scatter(name='2010',x=doy2010['Doy'],y=doy2010['Nivel'],mode='lines',line=dict(color='#800026',width=1, smoothing=0.1),line_shape='spline'),
-        go.Scatter(name='2005',x=doy2005['Doy'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=0.1),line_shape='spline'),
-        go.Scatter(name='1998',x=doy1998['Doy'],y=doy1998['Nivel'],mode='lines',line=dict(color='#e31a1c',width=1, smoothing=0.1),line_shape='spline'),
+        go.Scatter(name='2022',x=curData['Dt'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
+        go.Scatter(name='2015',x=curData['Dt'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
+        go.Scatter(name='2010',x=curData['Dt'],y=doy2010['Nivel'],mode='lines',line=dict(color='#800026',width=1, smoothing=0.1),line_shape='spline'),
+        go.Scatter(name='2005',x=curData['Dt'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=0.1),line_shape='spline'),
+        go.Scatter(name='1998',x=curData['Dt'],y=doy1998['Nivel'],mode='lines',line=dict(color='#e31a1c',width=1, smoothing=0.1),line_shape='spline'),
         # Climatology
-        go.Scatter(name='Mean/Média 1979-2022',x=doyMean['Doy'],y=doyMean['mean'],mode='lines',line=dict(color='rgb(100, 100, 100)', dash='dash'),line_shape='spline'),
-        go.Scatter(name='95% CI / IC',x=doySD['Doy'],y=doyMean['mean'] + 1.96 * doySD['std'],mode='lines',marker=dict(color="#444"),
+        go.Scatter(name='Mean/Média 1979-2022',x=curData['Dt'],y=doyMean['mean'],mode='lines',line=dict(color='rgb(100, 100, 100)', dash='dash'),line_shape='spline'),
+        go.Scatter(name='95% CI / IC', x=curData['Dt'],y=doyMean['mean'] + 1.96 * doySD['std'],mode='lines',marker=dict(color="#444"),
                 line=dict(width=0, smoothing=0.5),showlegend=False,line_shape='spline'),
-        go.Scatter(name='95% CI / IC',x=doySD['Doy'],y=doyMean['mean'] - 1.96 * doySD['std'],marker=dict(color="#444"),line=dict(width=0, smoothing=0.5),
+        go.Scatter(name='95% CI / IC',x=curData['Dt'],y=doyMean['mean'] - 1.96 * doySD['std'],marker=dict(color="#444"),line=dict(width=0, smoothing=0.5),
                 mode='lines',fillcolor='rgba(100, 100, 100, 0.2)',fill='tonexty',line_shape='spline')
     ])
 
