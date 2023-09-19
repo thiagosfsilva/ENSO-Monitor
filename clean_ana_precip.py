@@ -2,7 +2,7 @@
 import pandas as pd
 
 #%% 1) Select files to be processed. All files should be in the same input folder
-in_files = 'data/cotas_C_12351000.csv'
+in_files = 'data/chuvas_C_00266005.csv'
 
 f = in_files
 
@@ -13,10 +13,10 @@ def extract_level(in_df):
     stacked_data = pd.DataFrame(columns=['dt', 'value'])
     # Loop over original df to stack data
     for r in range(n_rows):
-        row_date = in_data.iloc[r]['Data']
+        row_date = in_df.iloc[r]['Data']
         row_year = row_date.strftime('%Y')
         row_month = row_date.strftime('%m')
-        d_vals = in_data.iloc[r, 16:47].values
+        d_vals = in_df.iloc[r, 13:44].values
         d_dates = [f'{row_year}-{row_month}-{day:0>2}' for day in range(1, 32)]
         df_temp = pd.DataFrame({'dt': d_dates, 'value': d_vals})
         stacked_data = pd.concat([stacked_data, df_temp], ignore_index=True)
@@ -41,7 +41,7 @@ for f in [in_files]:
     #%% Format input data
     in_data = in_data_raw.copy()
     in_data['Data'] = pd.to_datetime(in_data['Data'], format="%d/%m/%Y")
-    in_data = in_data[(in_data['MediaDiaria'] == 1) & (in_data['NivelConsistencia'] == 1)]
+    in_data = in_data[in_data['NivelConsistencia'] == 1]
 
 
     #%% Extract and stack observations
