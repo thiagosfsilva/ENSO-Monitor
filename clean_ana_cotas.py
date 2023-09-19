@@ -53,6 +53,8 @@ for f in [in_files]:
     #%% Save results
     out_name = f.replace('.csv', '_daily.csv')
     st_data.to_csv(out_name, index=False)
+    out_pickle = "./data/hisCota.pkl"
+    st_data.to_pickle(out_pickle)
 
     #%% Count observations for sanity check
     print(st_data.groupby('yr')['value'].count())

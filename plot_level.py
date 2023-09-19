@@ -8,7 +8,7 @@ pio.renderers.default = "vscode"
 def plot_level():
     # Get water level data
     curData = pd.read_pickle('data/curData.pkl').reset_index()
-    hisData = pd.read_pickle('data/hisData.pkl').reset_index()
+    hisData = pd.read_pickle('data/hisCota.pkl').reset_index()
     #curData.head()
 
     # Convert to meters
