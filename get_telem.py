@@ -14,7 +14,7 @@ def get_telem(export=False):
 
     #%% Make request
     response = requests.get(ana_url, params=params)
-    upDate = pd.DataFrame([datetime.today().date()])
+    upDate = pd.DataFrame({'updated':[datetime.today().date()]})['updated'].values[0]
 
     #%% Parse response as dataframe and clean it
     rawTable = pd.read_xml(response.content, namespaces={'msdata': "urn:schemas-microsoft-com:xml-msdata"},
