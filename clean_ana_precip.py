@@ -2,7 +2,7 @@
 import pandas as pd
 
 #%% 1) Select files to be processed. All files should be in the same input folder
-in_files = 'data/chuvas_C_00266005.csv'
+in_files = 'data/chuvas_C_00266000.csv'
 
 f = in_files
 
