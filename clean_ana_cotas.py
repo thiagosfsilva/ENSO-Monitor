@@ -54,6 +54,9 @@ for f in [in_files]:
     #%% Make sure values are floats
     st_data['Nivel'] = st_data['Nivel'].astype(float)
     
+    #%% Trim data to full years: 1978 - 2022
+    st_data = st_data[(1978 <= st_data['Yr']) & (st_data['Yr']<=2022)] 
+    
     #%% Save results
     out_name = f.replace('.csv', '_daily.csv')
     st_data.to_csv(out_name, index=False)
