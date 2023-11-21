@@ -8,10 +8,10 @@ f = in_files
 
 #%% 2) Set data extraction functions
 def extract_level(in_df):
-    # Set up for processing
+    #%% Set up for processing
     n_rows = len(in_df)
     stacked_data = pd.DataFrame(columns=['Dt', 'Nivel'])
-    # Loop over original df to stack data
+    #%% Loop over original df to stack data
     for r in range(n_rows):
         row_date = in_df.iloc[r]['Data']
         row_year = row_date.strftime('%Y')
@@ -43,10 +43,14 @@ for f in [in_files]:
     in_data = in_data_raw.copy()
     in_data['Data'] = pd.to_datetime(in_data['Data'], format="%d/%m/%Y")
     in_data = in_data[(in_data['MediaDiaria'] == 1)]
+    in_data = in_data.drop('NivelConsistencia',)
 
 
     #%% Extract and stack observations
-    st_data = extract_level(in_data)
+    in_melt = pd.melt(in_data,id_vars=['Data'],value_vars=)
+
+
+    #st_data = extract_level(in_data)
 
     #%%Remove February 29th
     st_data = st_data[~((st_data['Dy']==29) & (st_data['Mn']==2))]

@@ -6,7 +6,7 @@ from pandas import read_pickle
 
 # Generate water level plot
 fig_level = plot_level()
-fig_precip = plot_precip()
+#fig_precip = plot_precip()
 updated = read_pickle('data/upDate.pkl')
 print(updated.iloc[0,0])
 
@@ -35,16 +35,7 @@ app.layout = dbc.Container([
     #    ]),
     dbc.Row(
     dcc.Graph(id='fig-level', figure=fig_level,  style={'aspect-ratio': '21 / 10'}),
-    ),
-    dbc.Row(
-        html.H3('* Sep 20 to Oct 10 missing due to ANA systems hack / Dados de 20/09 a 10/10 nao disponiveis devido ao ataque cibernético à ANA')
-    ),
-    dbc.Row(
-    dcc.Graph(id='fig-precip', figure=fig_precip,  style={'aspect-ratio': '21 / 10'}),
-    ),
-    dbc.Row(
-        html.H3('* Average rainfall excludes days of zero rain / A chuva média desconsidera os dias sem chuva.')
-        ),
+    )
 ],
 fluid=True)
 
