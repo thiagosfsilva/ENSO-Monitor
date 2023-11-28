@@ -7,9 +7,9 @@ from pandas import read_pickle
 # Generate water level plot
 fig_level = plot_level()
 #fig_precip = plot_precip()
-updated = read_pickle('data/upDate.pkl')
-print(updated.iloc[0,0])
-
+with open('upDate.txt') as f:
+    updated = f.read()
+           
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY],
            meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"},
@@ -19,7 +19,7 @@ server = app.server
 app.layout = dbc.Container([
     dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink(f'Last updated on / Atualizado em {updated.iloc[0,0]}', href="#")),
+        dbc.NavItem(dbc.NavLink(f'Last updated on / Atualizado em {updated}', href="#")),
     ],
     brand="Monitor ENSO El Ninõ 2023 -  Fonte Boa",
     brand_href="#",
