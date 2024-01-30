@@ -1,0 +1,45 @@
+library(pacman)
+p_load('dplyr','here','lubridate','tidyr','stringr','glue','arrow')
+
+
+# Set input file(s)
+in_files <- here('data','cotas_C_12351000.csv')
+
+# Load and format raw data
+in_data_raw <- read.delim(in_files, skip = 12, sep = ';', dec = ',', header = T)
+
+in_data <- in_data_raw %>%
+    mutate(Data = parse_date_time(Data,orders='d/m/Y')) %>%
+    filter(MediaDiaria==1 & NivelConsistencia==2) %>%
+    select(EstacaoCodigo,Data,starts_with('Cota')) %>%
+    select(!ends_with('Status'))
+
+# Clean up data
+in_long <- in_data %>%
+    pivot_longer(cols = starts_with('Cota'),
+                        names_to='Dia',
+                        values_to='Nivel') %>% # stacks dates
+    mutate(yr = year(Data),
+           mn=month(Data),
+           dy = as.numeric(str_extract(Dia,"\\d+"))) %>% # gets Y, m, d as ints
+    mutate(dt = as.Date(glue('{yr}-{mn}-{dy}'))) %>%  # Build date
+    mutate(doy = yday(dt)) %>% # Add day of year column
+    filter(!is.na(dt)) %>% # Remove impossible dates
+    filter(!(mn==2 & dy == 29))  # Remove stupid leap days
+
+# Check data consistency per year
+yr_obs <- in_long %>% group_by(yr) %>%
+    summarise(nobs = length(Nivel))
+
+full_yrs <- yr_obs %>% filter(nobs==365) %>% select(yr)
+
+# Remove years without 365 obs
+in_clean <- in_long %>% filter(yr %in% full_yrs$yr) %>%
+    select('dt','doy','yr','Nivel') %>%
+    rename(level=Nivel)
+
+station <- in_long$EstacaoCodigo[1]
+
+# Save result as parquet file
+write_parquet(in_clean,here('data',glue('historicalLevels_{station}.parquet')))
+

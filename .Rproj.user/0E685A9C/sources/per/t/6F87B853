@@ -1,0 +1,27 @@
+{
+    "id": "6F87B853",
+    "path": "C:/Users/Thiago/Projects/ENSO-Monitor/src/NERC_analysis.R",
+    "project_path": "src/NERC_analysis.R",
+    "type": "r_source",
+    "hash": "33911273",
+    "contents": "",
+    "dirty": false,
+    "created": 1700643744882.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "66,0",
+        "scrollLine": "46"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1700741346,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1700741346087,
+    "read_only": false,
+    "read_only_alternatives": []
+}
