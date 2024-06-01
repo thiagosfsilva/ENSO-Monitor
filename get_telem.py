@@ -1,22 +1,27 @@
 #%% imports
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import date,datetime
+
+#%% 
+td = date.today().strftime("%Y-%m-%d")
 
 #%%
-def get_telem(export=False):
+def get_telem(td, export=False):
     #%% Set request parameters
     ana_url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/DadosHidrometeorologicos'
 
     params = {'codEstacao': '12351000',
               'dataInicio': '2023-01-01',
-              'dataFim': '2023-12-01'}
+              'dataFim': td}
 
     #%% Make request
+    print('Making request...')
     response = requests.get(ana_url, params=params)
     upDate = pd.DataFrame({'updated':[datetime.today().date()]})['updated'].values[0]
 
     #%% Parse response as dataframe and clean it
+    ('Parsing...')
     rawTable = pd.read_xml(response.content, namespaces={'msdata': "urn:schemas-microsoft-com:xml-msdata"},
                            xpath='.//DadosHidrometereologicos')
     rawTable.dropna()
@@ -49,14 +54,15 @@ def get_telem(export=False):
     #%%Export to file
     if export:
         #%%
+        curData.to_csv('data/curData.csv')
         curData.to_pickle('data/curData.pkl')
-        upDate.to_pickle('data/upDate.pkl')
+        #upDate.to_pickle('data/upDate.pkl')
         print(f'Data updated on {datetime.today()}')
     #%%
     return curData
 
 
 if __name__ == "__main__":
-    get_telem(export=True)
+    get_telem(td=td,export=True)
 
 # %%

@@ -17,6 +17,7 @@ def plot_level():
 
     #%% Convert data to datetime format
     curData['Dt'] = pd.to_datetime(curData['Dt'], format='%Y-%m-%d')
+    curData['Yr'] = pd.to_datetime(curData['Dt'], format='%Y-%m-%d').dt.year
 
     #%% Calculate statistics
     doyMean = hisData.groupby('Doy').Nivel.agg(['mean']).reset_index()
@@ -28,11 +29,14 @@ def plot_level():
     doy2010 = hisData[hisData['Yr']==2010]
     #doy2015 = hisData[hisData['Yr']==2015]
     doy2022 = hisData[hisData['Yr']==2022]
+    doy2023 = curData[curData['Yr']==2023]
+    doy2024 = curData[curData['Yr']==2024]
 
     #%% Generate Plot
     fig_level = go.Figure([
         # Current data
-        go.Scatter(name='2023',x=curData['Dt'],y=curData['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=4, smoothing=1),line_shape='spline'),
+        go.Scatter(name='2023',x=curData['Dt'],y=doy2023['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=1, smoothing=1),line_shape='spline'),
+        go.Scatter(name='2024',x=curData['Dt'],y=doy2024['Nivel'],mode='lines',line=dict(color='#FF0000', width=4, smoothing=1),line_shape='spline'),
         # Historical droughts
         go.Scatter(name='2022',x=curData['Dt'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
         #go.Scatter(name='2015',x=curData['Dt'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
