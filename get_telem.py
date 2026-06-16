@@ -15,6 +15,7 @@ def get_telem(td, export=False):
               'dataInicio': '2023-01-01',
               'dataFim': td}
 
+
     #%% Make request
     print('Making request...')
     response = requests.get(ana_url, params=params)
