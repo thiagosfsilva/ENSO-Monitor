@@ -32,6 +32,7 @@ def plot_level():
     doy2023 = curData[curData['Yr']==2023]
     doy2024 = curData[curData['Yr']==2024]
     doy2025 = curData[curData['Yr']==2025]
+    doy2026 = curData[curData['Yr']==2026]
 
 
     #%% Generate Plot
@@ -39,7 +40,8 @@ def plot_level():
         # Current data
         go.Scatter(name='2023',x=curData['Dt'],y=doy2023['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=1, smoothing=1),line_shape='spline'),
         go.Scatter(name='2024',x=curData['Dt'],y=doy2024['Nivel'],mode='lines',line=dict(color='#FF0000', width=2, smoothing=1),line_shape='spline'),
-        go.Scatter(name='2025',x=curData['Dt'],y=doy2025['Nivel'],mode='lines',line=dict(color='#FF0000', width=4, smoothing=1),line_shape='spline'),
+        go.Scatter(name='2025',x=curData['Dt'],y=doy2025['Nivel'],mode='lines',line=dict(color='#fecc5c', width=2, smoothing=1),line_shape='spline'),
+        go.Scatter(name='2026',x=curData['Dt'],y=doy2026['Nivel'],mode='lines',line=dict(color='#FF0000', width=4, smoothing=1),line_shape='spline'),
         # Historical droughts
         go.Scatter(name='2022',x=curData['Dt'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
         #go.Scatter(name='2015',x=curData['Dt'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
