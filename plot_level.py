@@ -42,7 +42,7 @@ def plot_level():
         go.Scatter(name='2005',x=curData['Dt'],y=doy2005['Nivel'],mode='lines',line=dict(color='#fd8d3c',width=1, smoothing=0.1),line_shape='spline'),
         go.Scatter(name='2010',x=curData['Dt'],y=doy2010['Nivel'],mode='lines',line=dict(color='#800026',width=1, smoothing=0.1),line_shape='spline'),
         #go.Scatter(name='2015',x=curData['Dt'],y=doy2015['Nivel'],mode='lines',line=dict(color='#fecc5c',width=1, smoothing=0.1),line_shape='spline'),
-        go.Scatter(name='2022',x=curData['Dt'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline')
+        go.Scatter(name='2022',x=curData['Dt'],y=doy2022['Nivel'],mode='lines',line=dict(color='#1a9641',width=1, smoothing=0.1),line_shape='spline'),
         go.Scatter(name='2023',x=curData['Dt'],y=doy2023['Nivel'],mode='lines',line=dict(color='#2c7bb6', width=1, smoothing=1),line_shape='spline'),
         go.Scatter(name='2024',x=curData['Dt'],y=doy2024['Nivel'],mode='lines',line=dict(color='#FF0000', width=2, smoothing=1),line_shape='spline'),
         go.Scatter(name='2025',x=curData['Dt'],y=doy2025['Nivel'],mode='lines',line=dict(color='#fecc5c', width=2, smoothing=1),line_shape='spline'),
