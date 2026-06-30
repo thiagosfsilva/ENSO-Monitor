@@ -15,13 +15,13 @@ STATIONS = {
 DROUGHT_YEARS = [1998, 2005, 2010, 2022, 2023, 2024, 2025]
 
 DROUGHT_STYLE = {
-    1998: {'color': '#e31a1c', 'width': 1},
-    2005: {'color': '#fd8d3c', 'width': 1},
-    2010: {'color': '#800026', 'width': 1},
-    2022: {'color': '#1a9641', 'width': 1},
-    2023: {'color': '#2c7bb6', 'width': 1},
-    2024: {'color': '#FF0000', 'width': 2},
-    2025: {'color': '#fecc5c', 'width': 2},
+    1998: {'color': '#7570b3', 'width': 1},
+    2005: {'color': '#d95f02', 'width': 1},
+    2010: {'color': '#1b9e77', 'width': 1},
+    2022: {'color': '#e7298a', 'width': 1},
+    2023: {'color': '#fc8d59', 'width': 1},
+    2024: {'color': '#e34a33', 'width': 2},
+    2025: {'color': '#4393c3', 'width': 2},
 }
 
 
@@ -48,9 +48,9 @@ def plot_station(station_code):
         parts.append(curData[curData['Yr'] >= telem_start][['Dt', 'Doy', 'Nivel', 'Yr']])
     allData = pd.concat(parts).sort_values('Dt').reset_index(drop=True)
 
-    # Climatology from analog baseline only
-    baseline = hisData[hisData['Yr'] < telem_start]
-    clim_label = f"{baseline['Yr'].min()}-{baseline['Yr'].max()}"
+    # Climatology — fixed 1980–2010 WMO standard baseline
+    baseline = hisData[(hisData['Yr'] >= 1980) & (hisData['Yr'] <= 2010)]
+    clim_label = '1980-2010'
     doyMean = baseline.groupby('Doy')['Nivel'].mean()
     doySD   = baseline.groupby('Doy')['Nivel'].std()
 
@@ -75,26 +75,36 @@ def plot_station(station_code):
     cur_data = allData[allData['Yr'] == current_year]['Nivel'].values
     traces.append(go.Scatter(
         name=str(current_year), x=x_axis, y=cur_data, mode='lines',
-        line=dict(color='#FF0000', width=4, smoothing=1),
+        line=dict(color='#000000', width=4, smoothing=1),
         line_shape='spline'
     ))
 
-    # Climatology mean + 95% CI band
+    # Climatology mean + nested CI bands (95% outer lighter, 50% inner darker)
     traces += [
         go.Scatter(
             name=f'Media {clim_label}', x=x_axis, y=doyMean.values,
-            mode='lines', line=dict(color='rgb(100,100,100)', dash='dash'),
+            mode='lines', line=dict(color='rgb(80,80,80)', dash='dash'),
             line_shape='spline'
         ),
+        # 95% CI — outer band (lighter)
         go.Scatter(
             name='95% CI', x=x_axis, y=(doyMean + 1.96 * doySD).values,
-            mode='lines', marker=dict(color='#444'), line=dict(width=0, smoothing=0.5),
-            showlegend=False, line_shape='spline'
+            mode='lines', line=dict(width=0), showlegend=False, line_shape='spline'
         ),
         go.Scatter(
             name='95% CI', x=x_axis, y=(doyMean - 1.96 * doySD).values,
-            mode='lines', marker=dict(color='#444'), line=dict(width=0, smoothing=0.5),
-            fill='tonexty', fillcolor='rgba(100,100,100,0.2)', line_shape='spline'
+            mode='lines', line=dict(width=0),
+            fill='tonexty', fillcolor='rgba(100,100,100,0.15)', line_shape='spline'
+        ),
+        # 50% CI — inner band (darker, drawn on top)
+        go.Scatter(
+            name='50% CI', x=x_axis, y=(doyMean + 0.674 * doySD).values,
+            mode='lines', line=dict(width=0), showlegend=False, line_shape='spline'
+        ),
+        go.Scatter(
+            name='50% CI', x=x_axis, y=(doyMean - 0.674 * doySD).values,
+            mode='lines', line=dict(width=0),
+            fill='tonexty', fillcolor='rgba(100,100,100,0.30)', line_shape='spline'
         ),
     ]
 

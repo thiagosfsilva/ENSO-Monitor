@@ -24,12 +24,12 @@ app.layout = dbc.Container([
     ),
     dbc.Row([
         dbc.Col(
-            dcc.Graph(id='fig-12351000', figure=figs['12351000'],
+            dcc.Graph(id='fig-11400000', figure=figs['11400000'],
                       style={'aspect-ratio': '4/3'}),
             width=6
         ),
         dbc.Col(
-            dcc.Graph(id='fig-11400000', figure=figs['11400000'],
+            dcc.Graph(id='fig-12351000', figure=figs['12351000'],
                       style={'aspect-ratio': '4/3'}),
             width=6
         ),
