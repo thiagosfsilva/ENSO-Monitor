@@ -1,49 +1,52 @@
 from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 from plot_level import plot_level
-from plot_precip import plot_precip
 from pandas import read_pickle
 
-# Generate water level plot
-fig_level = plot_level()
-fig_precip = plot_precip()
+figs    = plot_level()
 updated = read_pickle('data/levels/upDate.pkl')
-print(updated.iloc[0,0])
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY],
-           meta_tags=[
-        {"name": "viewport", "content": "width=device-width, initial-scale=1"},
-    ],)
+           meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 server = app.server
 
 app.layout = dbc.Container([
     dbc.NavbarSimple(
-    children=[
-        dbc.NavItem(dbc.NavLink(f'Last updated on / Atualizado em {updated.iloc[0,0]}', href="#")),
-    ],
-    brand="Monitor ENSO El Ninõ 2023 -  Fonte Boa",
-    brand_href="#",
-    color="primary",
-    dark=True,
+        children=[
+            dbc.NavItem(dbc.NavLink(
+                f'Last updated / Atualizado em {updated.iloc[0, 0]}', href='#'
+            )),
+        ],
+        brand='Monitor ENSO - Niveis do Rio Amazonas',
+        brand_href='#',
+        color='primary',
+        dark=True,
     ),
-    #dbc.Row([
-    #    dbc.Col([           
-    #html.H1(children='ENSO 2003 drought monitor', style={'textAlign':'center'}),
-    #html.H2(children=f'Last updated on {updated}', style={'textAlign':'center'}),
-    #html.Hr(),
-    #        ])
-    #    ]),
-    dbc.Row(
-    dcc.Graph(id='fig-level', figure=fig_level,  style={'aspect-ratio': '21 / 10'}),
-    ),
-    dbc.Row(
-    dcc.Graph(id='fig-precip', figure=fig_precip,  style={'aspect-ratio': '21 / 10'}),
-    ),
-    dbc.Row(
-        html.H2('* Average rainfall excludes days of zero rain / A chuva média desconsidera os dias sem chuva.')
+    dbc.Row([
+        dbc.Col(
+            dcc.Graph(id='fig-12351000', figure=figs['12351000'],
+                      style={'aspect-ratio': '4/3'}),
+            width=6
         ),
-],
-fluid=True)
+        dbc.Col(
+            dcc.Graph(id='fig-11400000', figure=figs['11400000'],
+                      style={'aspect-ratio': '4/3'}),
+            width=6
+        ),
+    ]),
+    dbc.Row([
+        dbc.Col(
+            dcc.Graph(id='fig-14990000', figure=figs['14990000'],
+                      style={'aspect-ratio': '4/3'}),
+            width=6
+        ),
+        dbc.Col(
+            dcc.Graph(id='fig-17050001', figure=figs['17050001'],
+                      style={'aspect-ratio': '4/3'}),
+            width=6
+        ),
+    ]),
+], fluid=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
