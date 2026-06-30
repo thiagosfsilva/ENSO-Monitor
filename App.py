@@ -7,7 +7,7 @@ from pandas import read_pickle
 # Generate water level plot
 fig_level = plot_level()
 fig_precip = plot_precip()
-updated = read_pickle('data/upDate.pkl')
+updated = read_pickle('data/levels/upDate.pkl')
 print(updated.iloc[0,0])
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY],

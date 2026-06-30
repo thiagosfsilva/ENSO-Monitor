@@ -10,8 +10,8 @@ TELEM_START_YEAR = 2023  # first year covered by the telemetry (curData) source
 #%%
 def plot_level():
     #%% Load and merge analog historical + telemetry data
-    curData = pd.read_pickle('data/curData.pkl').reset_index()
-    hisData = pd.read_pickle('data/hisCota.pkl').reset_index()
+    curData = pd.read_pickle('data/levels/curData_12351000.pkl').reset_index()
+    hisData = pd.read_pickle('data/levels/hisCota_12351000.pkl').reset_index()
 
     curData['Dt'] = pd.to_datetime(curData['Dt'])
     curData['Yr'] = curData['Dt'].dt.year

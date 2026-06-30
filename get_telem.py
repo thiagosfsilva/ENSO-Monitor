@@ -55,8 +55,8 @@ def get_telem(td, export=False):
     #%%Export to file
     if export:
         #%%
-        curData.to_csv('data/curData.csv')
-        curData.to_pickle('data/curData.pkl')
+        curData.to_csv('data/levels/curData_12351000.csv')
+        curData.to_pickle('data/levels/curData_12351000.pkl')
         #upDate.to_pickle('data/upDate.pkl')
         print(f'Data updated on {datetime.today()}')
     #%%
