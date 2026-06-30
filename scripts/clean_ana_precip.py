@@ -2,7 +2,7 @@
 import pandas as pd
 
 #%% 1) Select files to be processed. All files should be in the same input folder
-in_files = 'data/chuvas_C_00266000.csv'
+in_files = 'data/precip/raw/chuvas_C_00266000.csv'
 
 f = in_files
 
@@ -52,9 +52,7 @@ for f in [in_files]:
     st_data = st_data[~((st_data['Dy']==29) & (st_data['Mn']==2))]
 
     #%% Save results
-    out_name = f.replace('.csv', '_daily.csv')
-    out_pickle = "./data/hisPrec.pkl"
-    st_data.to_csv(out_name, index=False)
+    out_pickle = "data/precip/hisPrec_00266000.pkl"
     st_data.to_pickle(out_pickle)
 
     #%% Count observations for sanity check
