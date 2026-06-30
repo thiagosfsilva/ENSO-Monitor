@@ -1,69 +1,62 @@
 #%% imports
+import io
 import requests
 import pandas as pd
-from datetime import date,datetime
+from datetime import date, datetime
 
-#%% 
 td = date.today().strftime("%Y-%m-%d")
 
-#%%
-def get_telem(td, export=False):
-    #%% Set request parameters
-    ana_url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/DadosHidrometeorologicos'
+# dataInicio per station: year from which we rely on telemetry
+# (analog coverage determines the cutoff — see plot_level.py STATIONS config)
+STATION_CONFIGS = {
+    '12351000': '2023-01-01',  # Fonte Boa       — analog ends ~2022
+    '11400000': '2026-01-01',  # S.P. Olivenca   — analog covers to 2025
+    '14990000': '2022-01-01',  # Manaus          — analog ends 2014; need 2022+ drought years
+    '17050001': '2026-01-01',  # Obidos          — analog covers to 2025
+}
 
-    params = {'codEstacao': '12351000',
-              'dataInicio': '2023-01-01',
-              'dataFim': td}
+ANA_URL = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/DadosHidrometeorologicos'
 
 
-    #%% Make request
-    print('Making request...')
-    response = requests.get(ana_url, params=params)
-    upDate = pd.DataFrame({'updated':[datetime.today().date()]})['updated'].values[0]
+def get_telem(station_code, data_inicio, td, export=False):
+    params = {'codEstacao': station_code, 'dataInicio': data_inicio, 'dataFim': td}
 
-    #%% Parse response as dataframe and clean it
-    ('Parsing...')
-    rawTable = pd.read_xml(response.content, namespaces={'msdata': "urn:schemas-microsoft-com:xml-msdata"},
+    print(f'Fetching {station_code} ({data_inicio} to {td})...')
+    response = requests.get(ANA_URL, params=params)
+
+    rawTable = pd.read_xml(io.BytesIO(response.content),
+                           namespaces={'msdata': 'urn:schemas-microsoft-com:xml-msdata'},
                            xpath='.//DadosHidrometereologicos')
-    rawTable.dropna()
     rawTable['DataHora'] = pd.to_datetime(rawTable['DataHora'])
     rawTable['Doy'] = rawTable['DataHora'].dt.dayofyear
-    rawTable['Dt'] = pd.to_datetime(rawTable['DataHora']).dt.date
-    rawTable['Time'] = pd.to_datetime(rawTable['DataHora']).dt.time
-    rawTable.head()
+    rawTable['Dt'] = rawTable['DataHora'].dt.date
 
-    #%% Aggregate hydro data
-    curData = rawTable.groupby(['Dt', 'Doy']).agg({
-        'Vazao': 'max',
-        'Nivel': 'max',
-        'Chuva': 'sum'})
+    curData = rawTable.groupby(['Dt', 'Doy']).agg({'Vazao': 'max', 'Nivel': 'max', 'Chuva': 'sum'})
 
-    curData.head()
-
-    #%% Pad with empty values until the end of the year
+    # Pad with NaN rows to end of current year
     lastdate, lastdoy = curData.index[-1]
-    emptyDate = pd.date_range(lastdate, periods=365-lastdoy+1).date.tolist()
-    print(emptyDate)
-    emptyDoy = range(lastdoy,365)
+    emptyDate = pd.date_range(lastdate, periods=365 - lastdoy + 1).date.tolist()
+    emptyDoy  = range(lastdoy, 365)
     emptyVals = [None] * len(emptyDate)
-    emptyDF = pd.DataFrame(list(zip(emptyDate, emptyDoy,emptyVals,emptyVals,emptyVals)), columns =['Dt', 'Doy','Vazao','Nivel','Chuva']) 
-    emptyDF.set_index(['Dt','Doy'], drop=True, append=False, inplace=True, verify_integrity=True)
-    curData = pd.concat([curData,emptyDF])
-    print(curData) 
+    emptyDF = pd.DataFrame(
+        list(zip(emptyDate, emptyDoy, emptyVals, emptyVals, emptyVals)),
+        columns=['Dt', 'Doy', 'Vazao', 'Nivel', 'Chuva']
+    )
+    emptyDF.set_index(['Dt', 'Doy'], inplace=True)
+    curData = pd.concat([curData, emptyDF])
 
-
-    #%%Export to file
     if export:
-        #%%
-        curData.to_csv('data/curData.csv')
-        curData.to_pickle('data/curData.pkl')
-        #upDate.to_pickle('data/upDate.pkl')
-        print(f'Data updated on {datetime.today()}')
-    #%%
+        curData.to_csv(f'data/levels/curData_{station_code}.csv')
+        curData.to_pickle(f'data/levels/curData_{station_code}.pkl')
+        print(f'  Saved curData_{station_code}')
+
     return curData
 
 
-if __name__ == "__main__":
-    get_telem(td=td,export=True)
+if __name__ == '__main__':
+    for station_code, data_inicio in STATION_CONFIGS.items():
+        get_telem(station_code, data_inicio, td=td, export=True)
 
-# %%
+    upDate = pd.DataFrame({'updated': [datetime.today().date()]})
+    upDate.to_pickle('data/levels/upDate.pkl')
+    print(f'Done. Updated at {datetime.today()}')

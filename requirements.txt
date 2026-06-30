@@ -1,4 +1,4 @@
-dash==2.11.1
+dash==4.3.0
 dash-bootstrap-components==1.7.1
 gunicorn==26.0.0
 lxml==6.1.1

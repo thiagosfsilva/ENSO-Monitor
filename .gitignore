@@ -1,5 +1,7 @@
-/__pycache__
+**/__pycache__/
 .venv
 .spyproject
 .idea
+.Rproj.user/
+.Rhistory
 ENSO-Monitor
