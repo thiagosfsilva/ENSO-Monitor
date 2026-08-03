@@ -2,7 +2,6 @@ dash==4.3.0
 dash-bootstrap-components==1.7.1
 gunicorn==26.0.0
 lxml==6.1.1
-matplotlib==3.7.2
 numpy==2.4.6
 pandas==3.0.3
 plotly==5.15.0
