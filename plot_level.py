@@ -25,6 +25,25 @@ DROUGHT_STYLE = {
 }
 
 
+def _level_change(curData, days):
+    """Change in Nivel from the latest observed day to `days` before it."""
+    series = curData.dropna(subset=['Nivel']).set_index('Dt')['Nivel'].sort_index()
+    if series.empty:
+        return None
+    last_date = series.index[-1]
+    target_date = last_date - pd.Timedelta(days=days)
+    if target_date not in series.index:
+        return None
+    return series.loc[last_date] - series.loc[target_date]
+
+
+def _format_change(delta):
+    if delta is None:
+        return 'N/D'
+    sign = '+' if delta >= 0 else ''
+    return f'{sign}{delta:.2f} m'
+
+
 def plot_station(station_code):
     cfg = STATIONS[station_code]
     telem_start = cfg['telem_start']
@@ -122,6 +141,16 @@ def plot_station(station_code):
     fig.update_xaxes(showspikes=True, spikecolor='green', spikesnap='cursor',
                      spikemode='across', range=[x_start, x_end])
     fig.update_layout(spikedistance=1000, hoverdistance=100)
+
+    delta_1d = _level_change(curData, 1) if has_telem else None
+    delta_7d = _level_change(curData, 7) if has_telem else None
+    fig.add_annotation(
+        xref='paper', yref='paper', x=0.02, y=0.02,
+        xanchor='left', yanchor='bottom', align='left', showarrow=False,
+        text=f'Var. 1 dia: {_format_change(delta_1d)}<br>Var. 7 dias: {_format_change(delta_7d)}',
+        font=dict(size=11), bgcolor='rgba(255,255,255,0.7)',
+        bordercolor='rgba(0,0,0,0.2)', borderwidth=1, borderpad=4,
+    )
     return fig
 
 
