@@ -10,6 +10,8 @@ STATIONS = {
     '11400000': {'name': 'S. P. de Olivenca',     'telem_start': 2026},
     '14990000': {'name': 'Manaus',                'telem_start': 2022},
     '17050001': {'name': 'Obidos',                'telem_start': 2026},
+    '13150003': {'name': 'Coari',                 'telem_start': 2025},
+    '19500000': {'name': 'Macapa',                'telem_start': 2024},
 }
 
 DROUGHT_YEARS = [1998, 2005, 2010, 2022, 2023, 2024, 2025]
@@ -48,10 +50,13 @@ def plot_station(station_code):
     cfg = STATIONS[station_code]
     telem_start = cfg['telem_start']
 
-    hisData = pd.read_pickle(f'data/levels/hisCota_{station_code}.pkl').reset_index()
-    hisData['Dt'] = pd.to_datetime(hisData['Dt'])
-    hisData['Yr'] = hisData['Dt'].dt.year
-    hisData['Nivel'] = hisData['Nivel'] / 100
+    try:
+        hisData = pd.read_pickle(f'data/levels/hisCota_{station_code}.pkl').reset_index()
+        hisData['Dt'] = pd.to_datetime(hisData['Dt'])
+        hisData['Yr'] = hisData['Dt'].dt.year
+        hisData['Nivel'] = hisData['Nivel'] / 100
+    except FileNotFoundError:
+        hisData = pd.DataFrame(columns=['Dt', 'Doy', 'Nivel', 'Yr'])
 
     try:
         curData = pd.read_pickle(f'data/levels/curData_{station_code}.pkl').reset_index()

@@ -13,6 +13,8 @@ STATION_CONFIGS = {
     '11400000': '2026-01-01',  # S.P. Olivenca   — analog covers to 2025
     '14990000': '2022-01-01',  # Manaus          — analog ends 2014; need 2022+ drought years
     '17050001': '2026-01-01',  # Obidos          — analog covers to 2025
+    '13150003': '2025-01-01',  # Coari           — analog covers to 2024 (2025 partial)
+    '19500000': '2024-01-01',  # Macapa          — analog covers to 2023
 }
 
 ANA_URL = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/DadosHidrometeorologicos'

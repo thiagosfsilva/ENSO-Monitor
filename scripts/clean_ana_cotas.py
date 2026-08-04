@@ -21,7 +21,10 @@ def process_station(station_code):
     print(f'{station_code}: reading {os.path.basename(zip_path)}')
 
     with zipfile.ZipFile(zip_path) as zf:
-        with zf.open(f'{station_code}_Cotas.csv') as f:
+        # Some ANA exports nest the CSVs under a subfolder instead of the zip root.
+        target = f'{station_code}_Cotas.csv'
+        member = next(n for n in zf.namelist() if n.endswith(target))
+        with zf.open(member) as f:
             raw = pd.read_csv(f, skiprows=14, sep=';', decimal=',', encoding='latin-1')
 
     # Keep only daily averages
@@ -66,8 +69,8 @@ def process_station(station_code):
     print(df.groupby('Yr')['Nivel'].count().to_string())
     return df
 
-#%% Process all three new stations
+#%% Process all stations with a raw cotas zip in RAW_DIR
 if __name__ == '__main__':
-    for code in ['11400000', '14990000', '17050001']:
+    for code in ['11400000', '14990000', '17050001', '13150003', '19500000']:
         process_station(code)
         print()
