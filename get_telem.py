@@ -11,7 +11,7 @@ td = date.today().strftime("%Y-%m-%d")
 STATION_CONFIGS = {
     '12351000': '2023-01-01',  # Fonte Boa       — analog ends ~2022
     '11400000': '2026-01-01',  # S.P. Olivenca   — analog covers to 2025
-    '14990000': '2022-01-01',  # Manaus          — analog ends 2014; need 2022+ drought years
+    '14990000': '2015-01-01',  # Manaus          — analog ends 2014
     '17050001': '2026-01-01',  # Obidos          — analog covers to 2025
     '13150003': '2025-01-01',  # Coari           — analog covers to 2024 (2025 partial)
     '19500000': '2024-01-01',  # Macapa          — analog covers to 2023
@@ -39,7 +39,7 @@ def get_telem(station_code, data_inicio, td, export=False):
     lastdate, lastdoy = curData.index[-1]
     emptyDate = pd.date_range(lastdate, periods=365 - lastdoy + 1).date.tolist()
     emptyDoy  = range(lastdoy, 365)
-    emptyVals = [None] * len(emptyDate)
+    emptyVals = [float('nan')] * len(emptyDate)
     emptyDF = pd.DataFrame(
         list(zip(emptyDate, emptyDoy, emptyVals, emptyVals, emptyVals)),
         columns=['Dt', 'Doy', 'Vazao', 'Nivel', 'Chuva']

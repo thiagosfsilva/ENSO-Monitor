@@ -8,7 +8,7 @@ pio.renderers.default = "vscode"
 STATIONS = {
     '12351000': {'name': 'Fonte Boa',             'telem_start': 2023},
     '11400000': {'name': 'S. P. de Olivenca',     'telem_start': 2026},
-    '14990000': {'name': 'Manaus',                'telem_start': 2022},
+    '14990000': {'name': 'Manaus',                'telem_start': 2015},
     '17050001': {'name': 'Obidos',                'telem_start': 2026},
     '13150003': {'name': 'Coari',                 'telem_start': 2025},
     '19500000': {'name': 'Macapa',                'telem_start': 2024},
